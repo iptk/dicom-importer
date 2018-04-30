@@ -24,9 +24,10 @@ def move_file(path):
     full = os.path.join(data, name)
     if not os.path.exists(root):
         os.makedirs(root, exist_ok=True) # Multiple instances may run at the same time
+        logging.debug(f"Created dataset {root}")
     if os.path.isfile(full):
         if content_hash(full) != content_hash(path):
-            logging.error("File with different contents already exists at {}".format(full))
+            logging.error(f"File with different contents already exists at {full}")
         os.remove(path)
         logging.warning(f"{path} deleted")
     else:
@@ -35,11 +36,6 @@ def move_file(path):
         shutil.move(path, full)
     return True
     
-for filename in iglob(os.path.join(heap, "*")):
-    print(filename)
-#    path = os.path.join(heap, filename)
-#    logging.debug("Handling file {}".format(path))
-#    try:
-#        move_file(path)
-#    except:
-#        logging.error("Could not handle file {}".format(path))
+for path in iglob(os.path.join(heap, "*")):
+    logging.debug(f"Handling file {path}")
+    move_file(path)
