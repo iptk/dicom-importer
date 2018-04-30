@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import logging, dicom, hashlib, os, shutil, sys, filecmp
+import logging, pydicom, hashlib, os, shutil, sys, filecmp
 from glob import iglob
 
 base = '/datasets'
@@ -13,7 +13,7 @@ def content_hash(filename):
     return hash_sha1.hexdigest()
 
 def move_file(path):
-    file = dicom.read_file(path)
+    file = pydicom.read_file(path)
     siid = file.SeriesInstanceUID
     hash = hashlib.sha1(siid.encode('utf-8')).hexdigest().lower()
     root = os.path.join(base, hash[0], hash[1], hash[2], hash[3], hash)
