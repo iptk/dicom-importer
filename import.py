@@ -14,6 +14,9 @@ def content_hash(filename):
 
 def move_file(path):
     file = pydicom.read_file(path)
+    if not "SeriesInstanceUID" in file:
+        logging.warning(f"{path} has no SeriesInstanceUID. Skipping.")
+        continue
     siid = file.SeriesInstanceUID
     hash = hashlib.sha1(siid.encode('utf-8')).hexdigest().lower()
     root = os.path.join(base, hash[0], hash[1], hash[2], hash[3], hash)
