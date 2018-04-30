@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import logging, pydicom, hashlib, os, shutil, sys, filecmp
+import logging, pydicom, hashlib, os, shutil, sys, filecmp, time
 from glob import iglob
 
 base = '/datasets'
@@ -40,6 +40,11 @@ def move_file(path):
         shutil.move(path, full)
     return True
     
-for path in iglob(os.path.join(heap, "*")):
-    logging.debug(f"Handling file {path}")
-    move_file(path)
+while True:
+    count = 0
+    for path in iglob(os.path.join(heap, "*")):
+        logging.debug(f"Handling file {path}")
+        move_file(path)
+        count += 1
+    logging.info(f"Finished one iteration, handled {count} files. Sleeping.")
+    time.sleep(60)
